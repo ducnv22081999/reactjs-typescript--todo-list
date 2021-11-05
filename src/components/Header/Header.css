@@ -1,0 +1,22 @@
+.grid__row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+.info {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+  .date-time {
+    color: #dadada;
+    font-size: 36px;
+  }
+  
+  .status {
+    color: #545463;
+    border-bottom: 1px solid #545463;
+    font-size: 18px;
+  }

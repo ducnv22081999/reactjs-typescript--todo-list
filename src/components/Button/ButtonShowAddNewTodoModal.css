@@ -1,0 +1,19 @@
+  /* btn--show-modal */
+  .btn--show-modal {
+    position: fixed;
+    width: 45px;
+    height: 45px;
+    line-height: 45px;
+    background: #42489b;
+    right: 20px;
+    bottom: 20px;
+    text-align: center;
+    color: #fff;
+    font-size: 24px;
+    border-radius: 25px;
+    border-bottom-width: 2px;
+    cursor: pointer;
+    /* pointer-events: none; */
+    z-index: 2;
+  }
+  /* end btn--show-modal */
