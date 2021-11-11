@@ -4,8 +4,7 @@
   margin-right: -15px;
   margin-left: -15px;
 }
-.incomplete,
-.completed {
+.card__todo {
   position: relative;
   width: 100%;
   padding-right: 15px;

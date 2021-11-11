@@ -1,8 +1,9 @@
 import moment from "moment";
+import { ITodoItem } from "../interface";
 import "./Header.css";
 
 interface HeaderProps {
-  todos: any[];
+  todos: ITodoItem[];
 }
 
 const Header: React.FC<HeaderProps> = ({ todos }) => {

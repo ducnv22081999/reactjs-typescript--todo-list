@@ -1,40 +1,53 @@
-import "./TodoList.css";
+import TodoItem from "./TodoItem/TodoItem";
+import { ITodoItem, ICategoryItem } from "./../interface";
 import { nameCate } from "./../../data/categories";
+// import "./TodoList.css";
 
 interface TodoListProps {
-  todos: any[];
-  categories: any[];
+  list: ITodoItem[];
+  categories: ICategoryItem[];
   onCheckBox: (id: string) => void;
+  deleteTodo: (id: string) => void;
+  editTodo: (id: string) => void;
 }
-
 const TodoList: React.FC<TodoListProps> = ({
-  todos,
+  list,
   categories,
   onCheckBox,
+  deleteTodo,
+  editTodo
 }) => {
-  const incomplete = todos.filter((todo) => todo.isComplete === false);
-  const completed = todos.filter((todo) => todo.isComplete === true);
-
+  const incomplete = list.filter((todo) => todo.isComplete === false);
+  const completed = list.filter((todo) => todo.isComplete === true);
+  // renderTodoItem (item, index) {
+  //   return <TodoItem
+  //   key={index}
+  //   id={item.id}
+  //   title={item.title}
+  //   complete={item.isComplete}
+  //   category={nameCate(item.category_id)}
+  //   onCheckBox={(id: string) => onCheckBox(id)}
+  // />
+  // }
   return (
     <div>
       {/* row */}
       <div className="grid__row">
-        <div className="incomplete">
+        <div className="card__todo">
           <h3 className="title">Incomplete</h3>
           <div className="list">
             {/* 1item */}
             {incomplete.map((item, index) => (
-              <div className="list__item" key={index}>
-                <div className="list__item__title">
-                  <input
-                    type="checkbox"
-                    defaultChecked={false}
-                    onClick={() => onCheckBox(item.id)}
-                  />
-                  <h5>{item.title}</h5>
-                </div>
-                <div className="list__item__category">{nameCate(item.category_id)}</div>
-              </div>
+              <TodoItem
+                key={index}
+                id={item.id}
+                title={item.title}
+                complete={item.isComplete}
+                category={nameCate(item.category_id)}
+                onCheckBox={(id: string) => onCheckBox(id)}
+                deleteTodo={(id: string) => deleteTodo(id)}
+                editTodo={(id: string) => editTodo(id)}
+              />
             ))}
             {/* end 1item */}
           </div>
@@ -43,17 +56,21 @@ const TodoList: React.FC<TodoListProps> = ({
       {/* end row */}
       {/* row */}
       <div className="grid__row">
-        <div className="completed">
+        <div className="card__todo">
           <h3 className="title">Completed</h3>
           <div className="list">
             {/* 1item */}
             {completed.map((item, index) => (
-              <div className="list__item" key={index}>
-                <div className="list__item__title">
-                  <input type="checkbox" defaultChecked disabled />
-                  <h5 className="disable">{item.title}</h5>
-                </div>
-              </div>
+              <TodoItem
+                key={index}
+                id={item.id}
+                title={item.title}
+                complete={item.isComplete}
+                category={nameCate(item.category_id)}
+                onCheckBox={(id: string) => onCheckBox(id)}
+                deleteTodo={(id: string) => deleteTodo(id)}
+                editTodo={(id: string) => editTodo(id)}
+              />
             ))}
             {/* end 1item */}
           </div>

@@ -1,30 +1,31 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { ITodoItem, ICategoryItem } from './../interface';
 import "./AddNewTodoModal.css";
 
 interface AddNewTodoModalProps {
-  categories: object[];
-  receiveDataItem: (itemTodo: object) => void;
+  categories: ICategoryItem[];
+  editTodo?: ITodoItem;
+  onAddTodo: (itemTodo: ITodoItem) => void;
   onChangeShow: () => void;
 };
 
-const AddNewTodoModal: React.FC<AddNewTodoModalProps> = ({ receiveDataItem, categories, onChangeShow}) => {
+const AddNewTodoModal: React.FC<AddNewTodoModalProps> = ({ categories, editTodo, onAddTodo, onChangeShow }) => {
   const [inputTitle, setInputTitle] = useState("");
   const [inputCategory, setInputCategory] = useState("");
   
-  const itemTodo = {
-    id: uuidv4(),
-    title: inputTitle,
-    category_id: +inputCategory, // convert to number
-    isComplete: false
-  };
   const handleAdd = () => {
-    receiveDataItem(itemTodo);
-    onChangeShow();
+    const itemTodo = {
+      id: uuidv4(),
+      title: inputTitle,
+      category_id: "" + +inputCategory, // convert to string
+      isComplete: false // default complete false
+    };
+    console.log(itemTodo)
+    onAddTodo(itemTodo); // send data to App
+    onChangeShow(); // off Modal
   };
-
-  // console.log(props.dataCategorys);
-
+console.log(categories)
   return (
     <div className="grid modal">
       <div className="modal__overlay" />
@@ -51,8 +52,8 @@ const AddNewTodoModal: React.FC<AddNewTodoModalProps> = ({ receiveDataItem, cate
                   id="modal-form__input--category"
                   onChange={(e) => setInputCategory(e.target.value)}
                 >
-                  {categories.map((item: any, index: number) => (
-                    <option key={index} value={item.id}>
+                  {categories.map((item: ICategoryItem, index: number) => (
+                    <option key={index} value={item.id}>                      
                       {item.name}
                     </option>
                   ))}
