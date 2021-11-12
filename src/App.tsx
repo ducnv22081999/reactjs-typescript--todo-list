@@ -5,25 +5,29 @@ import AddNewTodoModal from "./components/Modal/AddNewTodoModal";
 import ButtonShowAddNewTodoModal from "./components/Button/ButtonShowAddNewTodoModal";
 import { categories } from "./data/categories";
 import { ITodoItem } from "./components/interface";
-import "./App.css";
 import TodoAPI from "./api/todoAPI";
+import "./App.css";
 
 function App() {
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowButton, setIsShowButton] = useState(true);
   const [todoList, setTodoList] = useState<ITodoItem[]>([]);
-
+  const [currentTodo, setCurrentTodo] = useState<ITodoItem | null>(null)
 
   useEffect(() => {
-    const getAll = async () => {
-      try {
-        const { data: list } = await TodoAPI.getAll();
-        setTodoList(list);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getAll();
+    // const getAll = async () => {
+    //   try {
+    //     const { data: list } = await TodoAPI.getAll();
+    //     setTodoList(list);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
+    // getAll();
+    TodoAPI.getAll()
+        .then((res) => setTodoList(res.data))
+        .catch((err) => console.log("Lỗi: ", err))
+        .then(() => {})
   }, []);
   // console.log(todoList)
 
@@ -66,16 +70,24 @@ function App() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   // handleEditTodo
-  const handleEditTodo = async (id: string) => {
-    const todo = todoList.filter((todo: ITodoItem) => todo.id === id);
-    console.log(todo[0])
-  }
+  const handleEditTodo = async (item: ITodoItem) => {
+    // console.log(item);
+    setCurrentTodo(item)
+    setIsShowModal(!isShowModal)
+  };
+
+  const handleUpdateTodo = async (item: ITodoItem) => {
+    //todo call api
+    console.log(item)
+    setCurrentTodo(null)
+    setIsShowModal(false); // on/off Modal
+    setIsShowButton(true); // on/off Button
+  };
 
   return (
     <div className="app">
-      {console.log("app đã chạy")}
       {isShowButton && (
         <ButtonShowAddNewTodoModal onChangeShow={handleChangeShow} />
       )}
@@ -94,10 +106,11 @@ function App() {
 
       {isShowModal && (
         <AddNewTodoModal
-        // editTodo={}
-          onChangeShow={handleChangeShow}
+          currentTodo={currentTodo}
           categories={categories}
-          onAddTodo={handleAddItem}  
+          onAddTodo={handleAddItem}
+          onEditTodo={handleUpdateTodo}
+          onClose={handleChangeShow}
         />
       )}
     </div>

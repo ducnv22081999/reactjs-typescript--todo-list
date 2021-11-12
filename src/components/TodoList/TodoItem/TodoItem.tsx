@@ -1,20 +1,16 @@
+import { ITodoItem } from "../../interface";
+import { nameCate } from "./../../../data/categories";
 import "./TodoItem.css";
 
 interface TodoItemProps {
-  id: string;
-  title: string;
-  complete: boolean;
-  category: string;
+  item: ITodoItem;
   onCheckBox: (id: string) => void;
   deleteTodo: (id: string) => void;
-  editTodo: (id: string) => void;
+  editTodo: (item: ITodoItem) => void;
 }
 
 const TodoItem: React.FC<TodoItemProps> = ({
-  id,
-  title,
-  complete,
-  category,
+  item,
   onCheckBox,
   deleteTodo,
   editTodo,
@@ -26,7 +22,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
           type="checkbox"
           checked={false}
           readOnly
-          onClick={() => onCheckBox(id)}
+          onClick={() => onCheckBox(item.id)}
         />
       );
     } else if (isComplete) {
@@ -35,30 +31,28 @@ const TodoItem: React.FC<TodoItemProps> = ({
           type="checkbox"
           defaultChecked
           disabled
-          onClick={() => onCheckBox(id)}
+          onClick={() => onCheckBox(item.id)}
         />
       );
     }
   };
   const isCheckCategoryCompleted = (isComplete: boolean) => {
     if (!isComplete) {
-      return category;
+      return nameCate(item.category_id);
     }
   };
   return (
     <div className="list__item">
       <div className="list__item__title">
-        {isCheckCompleteInput(complete)}
-        <h5>{title}</h5>
+        {isCheckCompleteInput(item.isComplete)}
+        <h5>{item.title}</h5>
         <div className="btn__group">
-          <button onClick={() => editTodo(id)}>Sửa</button>
-          <button className="btn btn--delete" onClick={() => deleteTodo(id)}>
-            Delete
-          </button>
+          <button className="btn btn--edit" onClick={() => editTodo(item)}>Sửa</button>
+          <button className="btn btn--delete" onClick={() => deleteTodo(item.id)}>Xóa</button>
         </div>
       </div>
       <div className="list__item__category">
-        {isCheckCategoryCompleted(complete)}
+        {isCheckCategoryCompleted(item.isComplete)}
       </div>
     </div>
   );

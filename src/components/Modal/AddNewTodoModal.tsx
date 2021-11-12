@@ -1,31 +1,52 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { ITodoItem, ICategoryItem } from './../interface';
+import { ITodoItem, ICategoryItem } from "./../interface";
 import "./AddNewTodoModal.css";
 
 interface AddNewTodoModalProps {
   categories: ICategoryItem[];
-  editTodo?: ITodoItem;
-  onAddTodo: (itemTodo: ITodoItem) => void;
-  onChangeShow: () => void;
-};
+  currentTodo: ITodoItem | null;
+  onAddTodo?: (itemTodo: ITodoItem) => void;
+  onEditTodo?: (itemTodo: ITodoItem) => void;
+  onClose: () => void;
+}
 
-const AddNewTodoModal: React.FC<AddNewTodoModalProps> = ({ categories, editTodo, onAddTodo, onChangeShow }) => {
-  const [inputTitle, setInputTitle] = useState("");
+const AddNewTodoModal: React.FC<AddNewTodoModalProps> = ({
+  categories,
+  currentTodo,
+  onAddTodo,
+  onEditTodo,
+  onClose,
+}) => {
+  const [inputTitle, setInputTitle] = useState(currentTodo?.title || "");
   const [inputCategory, setInputCategory] = useState("");
-  
-  const handleAdd = () => {
-    const itemTodo = {
-      id: uuidv4(),
-      title: inputTitle,
-      category_id: "" + +inputCategory, // convert to string
-      isComplete: false // default complete false
-    };
-    console.log(itemTodo)
-    onAddTodo(itemTodo); // send data to App
-    onChangeShow(); // off Modal
+
+  const handleSubmit = () => {
+    if (currentTodo && onEditTodo) {
+      const itemTodo = {
+        id: currentTodo.id,
+        title: inputTitle,
+        category_id: +inputCategory + "", // convert to string
+        isComplete: currentTodo.isComplete, // default complete false
+      };
+      onEditTodo(itemTodo); // send data to App
+      console.log("update")
+    }
+    else if (onAddTodo) {
+      const itemTodo = {
+        id: uuidv4(),
+        title: inputTitle,
+        category_id: +inputCategory + "", // convert to string
+        isComplete: false, // default complete false
+      };
+      onAddTodo(itemTodo); // send data to App
+      handleClose();
+      console.log("adđ")
+    }
   };
-console.log(categories)
+  const handleClose = () => {
+    onClose();
+  };
   return (
     <div className="grid modal">
       <div className="modal__overlay" />
@@ -40,6 +61,7 @@ console.log(categories)
                 <label>Tên công việc:</label>
                 <input
                   type="text"
+                  value={inputTitle}
                   className="modal-form__input"
                   placeholder="Todoooo..."
                   onChange={(e) => setInputTitle(e.target.value)}
@@ -53,20 +75,17 @@ console.log(categories)
                   onChange={(e) => setInputCategory(e.target.value)}
                 >
                   {categories.map((item: ICategoryItem, index: number) => (
-                    <option key={index} value={item.id}>                      
+                    <option key={index} value={item.id}>
                       {item.name}
                     </option>
                   ))}
                 </select>
               </div>
               <div className="modal-form__controls">
-                <button
-                  className="btn btn--close"
-                  onClick={() => onChangeShow()}
-                >
+                <button className="btn btn--close" onClick={handleClose}>
                   Đóng
                 </button>
-                <button className="btn btn--add" onClick={handleAdd}>
+                <button className="btn btn--add" onClick={handleSubmit}>
                   Thêm
                 </button>
               </div>
@@ -76,6 +95,6 @@ console.log(categories)
       </div>
     </div>
   );
-}
+};
 
 export default AddNewTodoModal;

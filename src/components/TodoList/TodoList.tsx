@@ -1,6 +1,6 @@
 import TodoItem from "./TodoItem/TodoItem";
 import { ITodoItem, ICategoryItem } from "./../interface";
-import { nameCate } from "./../../data/categories";
+
 // import "./TodoList.css";
 
 interface TodoListProps {
@@ -8,7 +8,7 @@ interface TodoListProps {
   categories: ICategoryItem[];
   onCheckBox: (id: string) => void;
   deleteTodo: (id: string) => void;
-  editTodo: (id: string) => void;
+  editTodo: (item: ITodoItem) => void;
 }
 const TodoList: React.FC<TodoListProps> = ({
   list,
@@ -40,13 +40,10 @@ const TodoList: React.FC<TodoListProps> = ({
             {incomplete.map((item, index) => (
               <TodoItem
                 key={index}
-                id={item.id}
-                title={item.title}
-                complete={item.isComplete}
-                category={nameCate(item.category_id)}
+                item={item}                
                 onCheckBox={(id: string) => onCheckBox(id)}
                 deleteTodo={(id: string) => deleteTodo(id)}
-                editTodo={(id: string) => editTodo(id)}
+                editTodo={(item: ITodoItem) => editTodo(item)}
               />
             ))}
             {/* end 1item */}
@@ -63,13 +60,10 @@ const TodoList: React.FC<TodoListProps> = ({
             {completed.map((item, index) => (
               <TodoItem
                 key={index}
-                id={item.id}
-                title={item.title}
-                complete={item.isComplete}
-                category={nameCate(item.category_id)}
+                item={item}                
                 onCheckBox={(id: string) => onCheckBox(id)}
                 deleteTodo={(id: string) => deleteTodo(id)}
-                editTodo={(id: string) => editTodo(id)}
+                editTodo={(item: ITodoItem) => editTodo(item)}
               />
             ))}
             {/* end 1item */}
